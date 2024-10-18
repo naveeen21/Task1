@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Based Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            margin: 20px;
+        }
+        .calculator {
+            display: none;
+        }
+        input[type="text"], input[type="number"] {
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+        }
+        button {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Signup for Calculator</h2>
+    <div class="form-container">
+        <form id="signupForm">
+            <input type="text" id="username" placeholder="Enter username" required>
+            <select id="operator" required>
+                <option value="">Select Operator</option>
+                <option value="add">Addition</option>
+                <option value="sub">Subtraction</option>
+                <option value="mul">Multiplication</option>
+            </select>
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+
+    <div class="calculator">
+        <h3>Welcome, <span id="welcomeUser"></span></h3>
+        <p>Operator: <span id="selectedOperator"></span></p>
+        <input type="number" id="num1" placeholder="Enter first number">
+        <input type="number" id="num2" placeholder="Enter second number">
+        <button id="calculateBtn">Calculate</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        const signupForm = document.getElementById('signupForm');
+        const calculator = document.querySelector('.calculator');
+        const welcomeUser = document.getElementById('welcomeUser');
+        const selectedOperator = document.getElementById('selectedOperator');
+        const result = document.getElementById('result');
+
+        let user = {
+            username: '',
+            operator: ''
+        };
+
+        // Sign up process
+        signupForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const operator = document.getElementById('operator').value;
+
+            if (username && operator) {
+                user.username = username;
+                user.operator = operator;
+                showCalculator();
+            } else {
+                alert('Please fill in all fields.');
+            }
+        });
+
+        // Show the calculator after signup
+        function showCalculator() {
+            signupForm.style.display = 'none';
+            calculator.style.display = 'block';
+            welcomeUser.textContent = user.username;
+            selectedOperator.textContent = getOperatorName(user.operator);
+        }
+
+        // Get the operator name
+        function getOperatorName(operator) {
+            if (operator === 'add') return 'Addition';
+            if (operator === 'sub') return 'Subtraction';
+            if (operator === 'mul') return 'Multiplication';
+        }
+
+        // Perform calculation based on operator selected
+        document.getElementById('calculateBtn').addEventListener('click', function() {
+            const num1 = parseFloat(document.getElementById('num1').value);
+            const num2 = parseFloat(document.getElementById('num2').value);
+
+            if (isNaN(num1) || isNaN(num2)) {
+                result.textContent = 'Please enter valid numbers.';
+                return;
+            }
+
+            let calcResult;
+            if (user.operator === 'add') {
+                calcResult = num1 + num2;
+            } else if (user.operator === 'sub') {
+                calcResult = num1 - num2;
+            } else if (user.operator === 'mul') {
+                calcResult = num1 * num2;
+            }
+
+            result.textContent = `Result: ${calcResult}`;
+        });
+    </script>
+
+</body>
+</html>
